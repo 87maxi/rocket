@@ -1,0 +1,9 @@
+[default]
+port = 8000
+address = "127.0.0.1"
+
+[default.databases.northwind]
+url = "mysql://root:@localhost:3306/northwind"
+min_connections = 1
+max_connections = 16
+connect_timeout = 5

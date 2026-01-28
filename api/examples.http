@@ -1,0 +1,122 @@
+### Health Check
+GET http://localhost:8000/api/health
+Content-Type: application/json
+
+### Get all orders
+GET http://localhost:8000/api/orders/
+Content-Type: application/json
+
+### Get specific order by ID
+GET http://localhost:8000/api/orders/10248
+Content-Type: application/json
+
+### Get orders by customer ID
+GET http://localhost:8000/api/orders/customer/ALFKI
+Content-Type: application/json
+
+### Get orders by employee ID
+GET http://localhost:8000/api/orders/employee/1
+Content-Type: application/json
+
+### Create new order
+POST http://localhost:8000/api/orders/
+Content-Type: application/json
+
+{
+  "customerID": "ALFKI",
+  "employeeID": 1,
+  "orderDate": "2024-01-15T10:30:00",
+  "requiredDate": "2024-02-15T10:30:00",
+  "shippedDate": null,
+  "shipVia": 1,
+  "freight": 32.38,
+  "shipName": "Alfreds Futterkiste",
+  "shipAddress": "Obere Str. 57",
+  "shipCity": "Berlin",
+  "shipRegion": null,
+  "shipPostalCode": "12209",
+  "shipCountry": "Germany"
+}
+
+### Create minimal order (only required fields)
+POST http://localhost:8000/api/orders/
+Content-Type: application/json
+
+{
+  "customerID": "BOTTM",
+  "employeeID": 2,
+  "shipName": "Bottom-Dollar Markets"
+}
+
+### Update order (partial update)
+PUT http://localhost:8000/api/orders/10248
+Content-Type: application/json
+
+{
+  "freight": 45.50,
+  "shippedDate": "2024-01-20T14:30:00"
+}
+
+### Update order shipping info
+PUT http://localhost:8000/api/orders/10249
+Content-Type: application/json
+
+{
+  "shipAddress": "New Address 123",
+  "shipCity": "New City",
+  "shipPostalCode": "54321",
+  "shipCountry": "Updated Country"
+}
+
+### Delete order
+DELETE http://localhost:8000/api/orders/10248
+Content-Type: application/json
+
+### Try to get deleted order (should return not found)
+GET http://localhost:8000/api/orders/10248
+Content-Type: application/json
+
+### Create order with current timestamp
+POST http://localhost:8000/api/orders/
+Content-Type: application/json
+
+{
+  "customerID": "CHOPS",
+  "employeeID": 3,
+  "orderDate": "2024-12-19T12:00:00",
+  "requiredDate": "2025-01-19T12:00:00",
+  "freight": 25.75,
+  "shipName": "Chop-suey Chinese",
+  "shipAddress": "Hauptstr. 31",
+  "shipCity": "Bern",
+  "shipPostalCode": "3012",
+  "shipCountry": "Switzerland"
+}
+
+### Get orders for specific customer with many orders
+GET http://localhost:8000/api/orders/customer/SAVEA
+Content-Type: application/json
+
+### Get orders for specific employee
+GET http://localhost:8000/api/orders/employee/5
+Content-Type: application/json
+
+### Try to get non-existent order
+GET http://localhost:8000/api/orders/99999
+Content-Type: application/json
+
+### Try to get orders for non-existent customer
+GET http://localhost:8000/api/orders/customer/XXXXX
+Content-Type: application/json
+
+### Update non-existent order (should fail)
+PUT http://localhost:8000/api/orders/99999
+Content-Type: application/json
+
+{
+  "freight": 100.00
+}
+
+### Delete non-existent order (should fail)
+DELETE http://localhost:8000/api/orders/99999
+Content-Type: application/json

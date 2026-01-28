@@ -1,6 +1,20 @@
 [package]
-name = "api"
+name = "northwind-orders-api"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+authors = ["Your Name <your.email@example.com>"]
+description = "A REST API for managing orders from the Northwind database using Rust and Rocket"
+license = "MIT"
+keywords = ["api", "rest", "northwind", "orders", "rocket"]
+categories = ["web-programming"]
 
 [dependencies]
+rocket = { version = "0.5", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "mysql", "chrono"] }
+tokio = { version = "1", features = ["macros"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+[dependencies.rocket_db_pools]
+version = "0.1"
+features = ["sqlx_mysql"]
