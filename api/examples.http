@@ -1,3 +1,8 @@
+# Northwind Orders API Examples
+#
+# NOTE: This API uses the actual Northwind database schema with snake_case field names.
+# All fields match the database structure exactly.
+
 ### Health Check
 GET http://localhost:8000/api/health
 Content-Type: application/json
@@ -7,73 +12,129 @@ GET http://localhost:8000/api/orders/
 Content-Type: application/json
 
 ### Get specific order by ID
-GET http://localhost:8000/api/orders/10248
+GET http://localhost:8000/api/orders/1
 Content-Type: application/json
 
-### Get orders by customer ID
-GET http://localhost:8000/api/orders/customer/ALFKI
+### Get orders by customer ID (now integer)
+GET http://localhost:8000/api/orders/customer/123
 Content-Type: application/json
 
 ### Get orders by employee ID
 GET http://localhost:8000/api/orders/employee/1
 Content-Type: application/json
 
-### Create new order
+### Create new order with complete fields
 POST http://localhost:8000/api/orders/
 Content-Type: application/json
 
 {
-  "customerID": "ALFKI",
-  "employeeID": 1,
-  "orderDate": "2024-01-15T10:30:00",
-  "requiredDate": "2024-02-15T10:30:00",
-  "shippedDate": null,
-  "shipVia": 1,
-  "freight": 32.38,
-  "shipName": "Alfreds Futterkiste",
-  "shipAddress": "Obere Str. 57",
-  "shipCity": "Berlin",
-  "shipRegion": null,
-  "shipPostalCode": "12209",
-  "shipCountry": "Germany"
+  "employee_id": 1,
+  "customer_id": 123,
+  "order_date": "2024-01-15T10:30:00",
+  "shipped_date": null,
+  "shipper_id": 1,
+  "ship_name": "Alfreds Futterkiste",
+  "ship_address": "Obere Str. 57",
+  "ship_city": "Berlin",
+  "ship_state_province": "Berlin",
+  "ship_zip_postal_code": "12209",
+  "ship_country_region": "Germany",
+  "shipping_fee": "32.38",
+  "taxes": "2.59",
+  "payment_type": "Credit Card",
+  "paid_date": null,
+  "notes": "Rush delivery requested",
+  "tax_rate": 0.08,
+  "tax_status_id": 1,
+  "status_id": 0
 }
+
+### Expected Response Format:
+# {
+#   "success": true,
+#   "message": "Order created successfully",
+#   "data": {
+#     "id": 1001,
+#     "employee_id": 1,
+#     "customer_id": 123,
+#     "order_date": "2024-01-15T10:30:00",
+#     ... (all fields with exact database names)
+#   }
+# }
 
 ### Create minimal order (only required fields)
 POST http://localhost:8000/api/orders/
 Content-Type: application/json
 
 {
-  "customerID": "BOTTM",
-  "employeeID": 2,
-  "shipName": "Bottom-Dollar Markets"
+  "employee_id": 2,
+  "customer_id": 456,
+  "ship_name": "Bottom-Dollar Markets",
+  "status_id": 0
 }
 
+### Database Field Reference:
+# Field Name           | Type        | Description
+# ---------------------|-------------|------------------------------------------
+# id                   | int(11)     | Primary key, auto-increment
+# employee_id          | int(11)     | Employee who processed the order
+# customer_id          | int(11)     | Customer who placed the order
+# order_date           | datetime    | Date when order was placed
+# shipped_date         | datetime    | Date when order was shipped
+# shipper_id           | int(11)     | Shipping company ID
+# ship_name            | varchar(50) | Ship-to name
+# ship_address         | longtext    | Ship-to address
+# ship_city            | varchar(50) | Ship-to city
+# ship_state_province  | varchar(50) | Ship-to state/province
+# ship_zip_postal_code | varchar(50) | Ship-to postal code
+# ship_country_region  | varchar(50) | Ship-to country/region
+# shipping_fee         | decimal     | Shipping cost (use string format: "32.38")
+# taxes                | decimal     | Tax amount (use string format: "2.59")
+# payment_type         | varchar(50) | Payment method
+# paid_date            | datetime    | Date when payment was received
+# notes                | longtext    | Order notes
+# tax_rate             | double      | Applied tax rate (use number format: 0.08)
+# tax_status_id        | tinyint(4)  | Tax status identifier
+# status_id            | tinyint(4)  | Order status identifier
+
 ### Update order (partial update)
-PUT http://localhost:8000/api/orders/10248
+PUT http://localhost:8000/api/orders/1
 Content-Type: application/json
 
 {
-  "freight": 45.50,
-  "shippedDate": "2024-01-20T14:30:00"
+  "shipping_fee": "45.50",
+  "shipped_date": "2024-01-20T14:30:00",
+  "status_id": 1
 }
 
 ### Update order shipping info
-PUT http://localhost:8000/api/orders/10249
+PUT http://localhost:8000/api/orders/2
 Content-Type: application/json
 
 {
-  "shipAddress": "New Address 123",
-  "shipCity": "New City",
-  "shipPostalCode": "54321",
-  "shipCountry": "Updated Country"
+  "ship_address": "New Address 123",
+  "ship_city": "New City",
+  "ship_zip_postal_code": "54321",
+  "ship_country_region": "Updated Country"
+}
+
+### Update order payment information
+PUT http://localhost:8000/api/orders/3
+Content-Type: application/json
+
+{
+  "payment_type": "Bank Transfer",
+  "paid_date": "2024-01-22T09:15:00",
+  "taxes": "15.75",
+  "tax_rate": 0.10
 }
 
 ### Delete order
-DELETE http://localhost:8000/api/orders/10248
+DELETE http://localhost:8000/api/orders/1
 Content-Type: application/json
 
 ### Try to get deleted order (should return not found)
-GET http://localhost:8000/api/orders/10248
+GET http://localhost:8000/api/orders/1
 Content-Type: application/json
 
 ### Create order with current timestamp
@@ -81,20 +142,27 @@ POST http://localhost:8000/api/orders/
 Content-Type: application/json
 
 {
-  "customerID": "CHOPS",
-  "employeeID": 3,
-  "orderDate": "2024-12-19T12:00:00",
-  "requiredDate": "2025-01-19T12:00:00",
-  "freight": 25.75,
-  "shipName": "Chop-suey Chinese",
-  "shipAddress": "Hauptstr. 31",
-  "shipCity": "Bern",
-  "shipPostalCode": "3012",
-  "shipCountry": "Switzerland"
+  "employee_id": 3,
+  "customer_id": 789,
+  "order_date": "2024-12-19T12:00:00",
+  "shipper_id": 2,
+  "ship_name": "Chop-suey Chinese",
+  "ship_address": "Hauptstr. 31",
+  "ship_city": "Bern",
+  "ship_state_province": "BE",
+  "ship_zip_postal_code": "3012",
+  "ship_country_region": "Switzerland",
+  "shipping_fee": "25.75",
+  "taxes": "2.06",
+  "payment_type": "Cash",
+  "tax_rate": 0.08,
+  "tax_status_id": 1,
+  "status_id": 0,
+  "notes": "Fragile items - handle with care"
 }
 
 ### Get orders for specific customer with many orders
-GET http://localhost:8000/api/orders/customer/SAVEA
+GET http://localhost:8000/api/orders/customer/500
 Content-Type: application/json
 
 ### Get orders for specific employee
@@ -106,7 +174,7 @@ GET http://localhost:8000/api/orders/99999
 Content-Type: application/json
 
 ### Try to get orders for non-existent customer
-GET http://localhost:8000/api/orders/customer/XXXXX
+GET http://localhost:8000/api/orders/customer/99999
 Content-Type: application/json
 
 ### Update non-existent order (should fail)
@@ -114,9 +182,38 @@ PUT http://localhost:8000/api/orders/99999
 Content-Type: application/json
 
 {
-  "freight": 100.00
+  "shipping_fee": "100.00"
 }
 
 ### Delete non-existent order (should fail)
 DELETE http://localhost:8000/api/orders/99999
 Content-Type: application/json
+
+### Test with different status values
+POST http://localhost:8000/api/orders/
+Content-Type: application/json
+
+{
+  "employee_id": 4,
+  "customer_id": 101,
+  "ship_name": "Test Order - Status Pending",
+  "status_id": 0,
+  "tax_status_id": 0,
+  "notes": "Test order for status management"
+}
+
+### Test with tax calculations
+POST http://localhost:8000/api/orders/
+Content-Type: application/json
+
+{
+  "employee_id": 1,
+  "customer_id": 102,
+  "ship_name": "Tax Calculation Test",
+  "shipping_fee": "100.00",
+  "tax_rate": 0.15,
+  "taxes": "15.00",
+  "payment_type": "Credit Card",
+  "tax_status_id": 1,
+  "status_id": 0
+}

@@ -1,134 +1,134 @@
 use chrono::NaiveDateTime;
 use rocket::serde::{Deserialize, Serialize};
+use rust_decimal::Decimal;
 use sqlx::FromRow;
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 #[serde(crate = "rocket::serde")]
 pub struct Order {
-    #[serde(rename = "orderID")]
-    pub order_id: Option<i32>,
+    pub id: Option<i32>,
 
-    #[serde(rename = "customerID")]
-    pub customer_id: Option<String>,
-
-    #[serde(rename = "employeeID")]
     pub employee_id: Option<i32>,
 
-    #[serde(rename = "orderDate")]
+    pub customer_id: Option<i32>,
+
     pub order_date: Option<NaiveDateTime>,
 
-    #[serde(rename = "requiredDate")]
-    pub required_date: Option<NaiveDateTime>,
-
-    #[serde(rename = "shippedDate")]
     pub shipped_date: Option<NaiveDateTime>,
 
-    #[serde(rename = "shipVia")]
-    pub ship_via: Option<i32>,
+    pub shipper_id: Option<i32>,
 
-    pub freight: Option<f64>,
-
-    #[serde(rename = "shipName")]
     pub ship_name: Option<String>,
 
-    #[serde(rename = "shipAddress")]
     pub ship_address: Option<String>,
 
-    #[serde(rename = "shipCity")]
     pub ship_city: Option<String>,
 
-    #[serde(rename = "shipRegion")]
-    pub ship_region: Option<String>,
+    pub ship_state_province: Option<String>,
 
-    #[serde(rename = "shipPostalCode")]
-    pub ship_postal_code: Option<String>,
+    pub ship_zip_postal_code: Option<String>,
 
-    #[serde(rename = "shipCountry")]
-    pub ship_country: Option<String>,
+    pub ship_country_region: Option<String>,
+
+    pub shipping_fee: Option<Decimal>,
+
+    pub taxes: Option<Decimal>,
+
+    pub payment_type: Option<String>,
+
+    pub paid_date: Option<NaiveDateTime>,
+
+    pub notes: Option<String>,
+
+    pub tax_rate: Option<f64>,
+
+    pub tax_status_id: Option<i8>,
+
+    pub status_id: Option<i8>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct NewOrder {
-    #[serde(rename = "customerID")]
-    pub customer_id: Option<String>,
-
-    #[serde(rename = "employeeID")]
     pub employee_id: Option<i32>,
 
-    #[serde(rename = "orderDate")]
+    pub customer_id: Option<i32>,
+
     pub order_date: Option<NaiveDateTime>,
 
-    #[serde(rename = "requiredDate")]
-    pub required_date: Option<NaiveDateTime>,
-
-    #[serde(rename = "shippedDate")]
     pub shipped_date: Option<NaiveDateTime>,
 
-    #[serde(rename = "shipVia")]
-    pub ship_via: Option<i32>,
+    pub shipper_id: Option<i32>,
 
-    pub freight: Option<f64>,
-
-    #[serde(rename = "shipName")]
     pub ship_name: Option<String>,
 
-    #[serde(rename = "shipAddress")]
     pub ship_address: Option<String>,
 
-    #[serde(rename = "shipCity")]
     pub ship_city: Option<String>,
 
-    #[serde(rename = "shipRegion")]
-    pub ship_region: Option<String>,
+    pub ship_state_province: Option<String>,
 
-    #[serde(rename = "shipPostalCode")]
-    pub ship_postal_code: Option<String>,
+    pub ship_zip_postal_code: Option<String>,
 
-    #[serde(rename = "shipCountry")]
-    pub ship_country: Option<String>,
+    pub ship_country_region: Option<String>,
+
+    pub shipping_fee: Option<Decimal>,
+
+    pub taxes: Option<Decimal>,
+
+    pub payment_type: Option<String>,
+
+    pub paid_date: Option<NaiveDateTime>,
+
+    pub notes: Option<String>,
+
+    pub tax_rate: Option<f64>,
+
+    pub tax_status_id: Option<i8>,
+
+    pub status_id: Option<i8>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct UpdateOrder {
-    #[serde(rename = "customerID")]
-    pub customer_id: Option<String>,
-
-    #[serde(rename = "employeeID")]
     pub employee_id: Option<i32>,
 
-    #[serde(rename = "orderDate")]
+    pub customer_id: Option<i32>,
+
     pub order_date: Option<NaiveDateTime>,
 
-    #[serde(rename = "requiredDate")]
-    pub required_date: Option<NaiveDateTime>,
-
-    #[serde(rename = "shippedDate")]
     pub shipped_date: Option<NaiveDateTime>,
 
-    #[serde(rename = "shipVia")]
-    pub ship_via: Option<i32>,
+    pub shipper_id: Option<i32>,
 
-    pub freight: Option<f64>,
-
-    #[serde(rename = "shipName")]
     pub ship_name: Option<String>,
 
-    #[serde(rename = "shipAddress")]
     pub ship_address: Option<String>,
 
-    #[serde(rename = "shipCity")]
     pub ship_city: Option<String>,
 
-    #[serde(rename = "shipRegion")]
-    pub ship_region: Option<String>,
+    pub ship_state_province: Option<String>,
 
-    #[serde(rename = "shipPostalCode")]
-    pub ship_postal_code: Option<String>,
+    pub ship_zip_postal_code: Option<String>,
 
-    #[serde(rename = "shipCountry")]
-    pub ship_country: Option<String>,
+    pub ship_country_region: Option<String>,
+
+    pub shipping_fee: Option<Decimal>,
+
+    pub taxes: Option<Decimal>,
+
+    pub payment_type: Option<String>,
+
+    pub paid_date: Option<NaiveDateTime>,
+
+    pub notes: Option<String>,
+
+    pub tax_rate: Option<f64>,
+
+    pub tax_status_id: Option<i8>,
+
+    pub status_id: Option<i8>,
 }
 
 #[derive(Debug, Serialize)]

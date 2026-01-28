@@ -80,7 +80,7 @@ pub async fn delete_order(mut db: Connection<Db>, order_id: i32) -> Json<ApiResp
 #[get("/customer/<customer_id>")]
 pub async fn get_orders_by_customer(
     mut db: Connection<Db>,
-    customer_id: &str,
+    customer_id: i32,
 ) -> Json<ApiResponse<Vec<Order>>> {
     match OrderService::get_orders_by_customer(&mut **db, customer_id).await {
         Ok(orders) => Json(ApiResponse::success(

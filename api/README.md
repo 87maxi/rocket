@@ -12,6 +12,7 @@ Una API REST construida con Rust y Rocket para gestionar pedidos de la base de d
 - ⚡ **Async/Await**: Operaciones asíncronas para mejor rendimiento
 - 🛡️ **Seguridad de Tipos**: Validación en tiempo de compilación
 - 🔄 **Conexión Pool**: Pool de conexiones para mejor rendimiento
+- 🏷️ **Naming Convention**: API usa snake_case, BD usa UpperCamelCase con mapeo automático
 
 ## Prerequisitos
 
@@ -104,6 +105,8 @@ La API estará disponible en `http://localhost:8000`
   "shipPostalCode": "12209",
   "shipCountry": "Germany"
 }
+
+**Nota**: Los nombres de campos JSON siguen convención snake_case mientras que la base de datos usa UpperCamelCase. El mapeo es automático usando aliases SQL.
 ```
 
 #### Actualizar pedido
@@ -211,7 +214,8 @@ northwind-orders-api/
 ├── README.md            # Documentación del proyecto
 ├── examples.http        # Ejemplos de requests HTTP para testing
 ├── start.sh            # Script de inicio con verificaciones
-└── .env.example        # Plantilla de variables de entorno
+├── .env.example        # Plantilla de variables de entorno
+└── FIELD_MAPPING.md    # Documentación de mapeo de campos
 ```
 
 ### Descripción de Módulos
@@ -220,6 +224,7 @@ northwind-orders-api/
 - **`handlers.rs`**: Endpoints HTTP que manejan requests/responses y validación
 - **`services.rs`**: Capa de servicios con lógica de negocio y operaciones CRUD
 - **`models.rs`**: Definición de estructuras de datos, DTOs y responses de API
+- **`FIELD_MAPPING.md`**: Documentación detallada del mapeo entre snake_case (API) y UpperCamelCase (BD)
 
 ## Modelo de Datos
 
