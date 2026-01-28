@@ -1,0 +1,17 @@
+services:
+  db:
+    build: ./northwind-db
+    container_name: northwind-db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: northwind
+      MARIADB_USER: user
+      MARIADB_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
