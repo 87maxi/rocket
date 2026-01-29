@@ -62,4 +62,4 @@ The backend is a RESTful API built with Rust and the Rocket framework that provi
 4. For development, copy `.env.example` to `.env`
 5. Run `npm run dev` to start the development server
 6. Access the application at `http://localhost:3000`
-
+prueba
