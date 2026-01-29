@@ -9,7 +9,9 @@ mod services;
 
 use handlers::Db;
 use rocket::fairing::AdHoc;
+use rocket::http::Method;
 use rocket::{launch, Request};
+use rocket_cors::{AllowedHeaders, AllowedOrigins, CorsOptions};
 use rocket_db_pools::Database;
 
 /// Custom catcher for 404 errors
@@ -38,6 +40,41 @@ fn unprocessable_entity(_req: &Request) -> rocket::serde::json::Json<models::Api
     rocket::serde::json::Json(ApiResponse::error(
         "Invalid request data. Please check your JSON payload format.",
     ))
+}
+
+/// Configure CORS to allow requests from the Next.js frontend
+fn configure_cors() -> rocket_cors::Cors {
+    let allowed_origins = AllowedOrigins::some_exact(&[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
+    ]);
+
+    CorsOptions {
+        allowed_origins,
+        allowed_methods: vec![
+            Method::Get,
+            Method::Post,
+            Method::Put,
+            Method::Delete,
+            Method::Options,
+        ]
+        .into_iter()
+        .map(From::from)
+        .collect(),
+        allowed_headers: AllowedHeaders::some(&[
+            "Authorization",
+            "Accept",
+            "Content-Type",
+            "Origin",
+            "X-Requested-With",
+        ]),
+        allow_credentials: true,
+        ..Default::default()
+    }
+    .to_cors()
+    .expect("CORS configuration error")
 }
 
 /// Verify that all required modules are properly loaded
@@ -97,8 +134,12 @@ fn rocket() -> _ {
         }
     }
 
+    // Configure CORS
+    let cors = configure_cors();
+
     // Build and configure Rocket
     rocket::build()
+        .attach(cors)
         .attach(AdHoc::on_liftoff("Startup Info", |rocket| {
             Box::pin(async move {
                 let config = rocket.config();
@@ -125,6 +166,7 @@ fn rocket() -> _ {
                 println!("   DELETE /api/orders/<id>");
                 println!("   GET    /api/orders/customer/<customer_id>");
                 println!("   GET    /api/orders/employee/<employee_id>");
+                println!("🔓 CORS enabled for localhost:3000, localhost:3001");
                 println!("🎯 API is ready to receive requests!");
             })
         }))
@@ -197,5 +239,12 @@ mod tests {
 
         assert_eq!(order.id, Some(1));
         assert_eq!(order.customer_id, Some(123));
+    }
+
+    #[test]
+    fn test_cors_configuration() {
+        let cors = configure_cors();
+        // If we get here without panicking, CORS is configured correctly
+        assert!(true);
     }
 }
