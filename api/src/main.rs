@@ -9,7 +9,7 @@ mod services;
 
 use handlers::Db;
 use rocket::fairing::AdHoc;
-use rocket::http::Method;
+use rocket::http::{Method, Status};
 use rocket::{launch, Request};
 use rocket_cors::{AllowedHeaders, AllowedOrigins, CorsOptions};
 use rocket_db_pools::Database;
@@ -42,14 +42,19 @@ fn unprocessable_entity(_req: &Request) -> rocket::serde::json::Json<models::Api
     ))
 }
 
-/// Configure CORS to allow requests from the Next.js frontend
+/// This is a catch-all for all OPTIONS requests.
+/// It allows the CORS fairing to work correctly.
+#[rocket::options("/<_..>")]
+fn all_options() -> Status {
+    Status::NoContent
+}
+
+/// Configure CORS to allow requests from any origin for local development
 fn configure_cors() -> rocket_cors::Cors {
-    let allowed_origins = AllowedOrigins::some_exact(&[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
-    ]);
+    // This setting allows requests from any origin, which is convenient for
+    // local development and testing with tools like Zed's HTTP client.
+    // For production, you should restrict this to your frontend's domain.
+    let allowed_origins = AllowedOrigins::all();
 
     CorsOptions {
         allowed_origins,
@@ -171,6 +176,7 @@ fn rocket() -> _ {
             })
         }))
         .attach(Db::init())
+        .mount("/", rocket::routes![all_options])
         .mount("/api/orders", handlers::routes())
         .mount("/api", rocket::routes![handlers::health_check])
         .register(

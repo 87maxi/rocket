@@ -1,0 +1,129 @@
+@baseUrl = http://localhost:8000/api
+
+### 1. Health Check
+# Check if the API is running and responsive
+GET {{baseUrl}}/health
+Content-Type: application/json
+
+### 2. Get all orders
+# Retrieve a list of all orders
+GET {{baseUrl}}/orders/
+Content-Type: application/json
+
+### 3. Get specific order by ID
+# Retrieve details of a single order by its ID
+GET {{baseUrl}}/orders/1
+Content-Type: application/json
+
+### 4. Get orders by customer ID
+# Retrieve all orders associated with a specific customer (integer ID)
+GET {{baseUrl}}/orders/customer/123
+Content-Type: application/json
+
+### 5. Get orders by employee ID
+# Retrieve all orders processed by a specific employee
+GET {{baseUrl}}/orders/employee/1
+Content-Type: application/json
+
+### 6. Create new complete order
+# Create a new order with all fields populated
+POST {{baseUrl}}/orders/
+Content-Type: application/json
+
+{
+  "employee_id": 1,
+  "customer_id": 123,
+  "order_date": "2024-01-15T10:30:00",
+  "shipped_date": null,
+  "shipper_id": 1,
+  "ship_name": "Alfreds Futterkiste",
+  "ship_address": "Obere Str. 57",
+  "ship_city": "Berlin",
+  "ship_state_province": "Berlin",
+  "ship_zip_postal_code": "12209",
+  "ship_country_region": "Germany",
+  "shipping_fee": "32.38",
+  "taxes": "2.59",
+  "payment_type": "Credit Card",
+  "paid_date": null,
+  "notes": "Rush delivery requested",
+  "tax_rate": 0.08,
+  "tax_status_id": 1,
+  "status_id": 0
+}
+
+### 7. Create minimal order
+# Create an order providing only the required fields
+POST {{baseUrl}}/orders/
+Content-Type: application/json
+
+{
+  "employee_id": 2,
+  "customer_id": 456,
+  "ship_name": "Bottom-Dollar Markets",
+  "status_id": 0
+}
+
+### 8. Update order (partial update)
+# Update specific fields of an existing order
+PUT {{baseUrl}}/orders/1
+Content-Type: application/json
+
+{
+  "shipping_fee": "45.50",
+  "shipped_date": "2024-01-20T14:30:00",
+  "status_id": 1
+}
+
+### 9. Update order shipping info
+# Update the shipping address and details
+PUT {{baseUrl}}/orders/2
+Content-Type: application/json
+
+{
+  "ship_address": "New Address 123",
+  "ship_city": "New City",
+  "ship_zip_postal_code": "54321",
+  "ship_country_region": "Updated Country"
+}
+
+### 10. Delete order
+# Remove an order by its ID
+DELETE {{baseUrl}}/orders/1
+Content-Type: application/json
+
+### 11. Try to get non-existent order (Error Testing)
+# Should return a 404 Not Found response
+GET {{baseUrl}}/orders/99999
+Content-Type: application/json
+
+### 12. Test with tax calculations
+# Create an order specifying tax rates and amounts
+POST {{baseUrl}}/orders/
+Content-Type: application/json
+
+{
+  "employee_id": 1,
+  "customer_id": 102,
+  "ship_name": "Tax Calculation Test",
+  "shipping_fee": "100.00",
+  "tax_rate": 0.15,
+  "taxes": "15.00",
+  "payment_type": "Credit Card",
+  "tax_status_id": 1,
+  "status_id": 0
+}
+
+### 13. Invalid Endpoint (Error Testing)
+# Should return a custom 404 error from the catchers
+GET {{baseUrl}}/invalid-endpoint
+Content-Type: application/json
+
+### 14. Unprocessable Entity (Error Testing)
+# Missing required valid JSON syntax to trigger a 422 error
+POST {{baseUrl}}/orders/
+Content-Type: application/json
+
+{
+  "employee_id": "invalid_string_instead_of_int"
+}

@@ -1,5 +1,7 @@
 # Northwind Orders Management System
 
+![Descripción](assets/northwind_crud.png)
+
 Este proyecto es un **caso de estudio full-stack** que demuestra la implementación de una arquitectura moderna utilizando **Rust (Rocket)** para el backend y **Next.js** para el frontend. El sistema permite la gestión integral de órdenes de la base de datos clásica "Northwind".
 
 ## 🚀 Arquitectura del Proyecto
